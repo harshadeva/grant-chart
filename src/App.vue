@@ -41,6 +41,25 @@ const exportData = () => {
 </script>
 
 <style lang="scss">
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #6c757d;
+  --border-color: #e9ecef;
+  --light-color: #f8f9fa;
+  --error-color: #ff4444;
+  --header-bg: #ffffff;
+  --task-hover: #f1f5f9;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc;
+}
+
 .app {
   display: flex;
   flex-direction: column;
@@ -93,5 +112,35 @@ const exportData = () => {
       padding: 1rem;
     }
   }
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.btn-danger {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #ff1a1a;
 }
 </style> 

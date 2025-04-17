@@ -2,18 +2,39 @@
   <div class="team-members">
     <div class="team-members-header">
       <h2>Team Members</h2>
-      <button class="btn btn-primary" @click="showAddModal = true">Add Member</button>
+      <button class="btn btn-primary add-member-btn" @click="showAddModal = true">
+        <span class="icon">+</span>
+        Add Member
+      </button>
     </div>
 
     <div class="team-members-list">
       <div v-for="member in teamMembers" :key="member.id" class="team-member-item">
         <div class="member-info">
-          <div class="member-color" :style="{ backgroundColor: member.color }"></div>
-          <span class="member-name">{{ member.name }}</span>
+          <div class="member-avatar" :style="{ backgroundColor: member.color }">
+            {{ getInitials(member.name) }}
+          </div>
+          <div class="member-details">
+            <span class="member-name">{{ member.name }}</span>
+            <div class="member-tasks">
+              {{ getAssignedTasksCount(member.id) }} tasks assigned
+            </div>
+          </div>
         </div>
         <div class="member-actions">
-          <button class="btn btn-primary" @click="editMember(member)">Edit</button>
-          <button class="btn btn-danger" @click="deleteMember(member.id)">Delete</button>
+          <button class="action-btn edit-btn" @click="editMember(member)" title="Edit member">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </button>
+          <button class="action-btn delete-btn" @click="deleteMember(member.id)" title="Delete member">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -33,18 +54,30 @@
               id="memberName"
               v-model="memberForm.name"
               type="text"
+              placeholder="Enter member name"
               required
             >
           </div>
 
           <div class="form-group">
             <label for="memberColor">Color</label>
-            <input
-              id="memberColor"
-              v-model="memberForm.color"
-              type="color"
-              required
-            >
+            <div class="color-picker-wrapper">
+              <input
+                id="memberColor"
+                v-model="memberForm.color"
+                type="color"
+                required
+              >
+              <div class="color-presets">
+                <div
+                  v-for="color in colorPresets"
+                  :key="color"
+                  class="color-preset"
+                  :style="{ backgroundColor: color }"
+                  @click="memberForm.color = color"
+                ></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -63,18 +96,38 @@ import { useGanttStore } from '../stores/gantt'
 import type { TeamMember } from '../stores/gantt'
 
 const store = useGanttStore()
-const teamMembers = computed(() => {
-  const members = store.teamMembers.value
-  console.log('Team members in TeamMembers component:', members)
-  return members
-})
+const teamMembers = computed(() => store.teamMembers.value)
 
 const showAddModal = ref(false)
 const editingMember = ref<TeamMember | null>(null)
 const memberForm = ref({
   name: '',
-  color: '#007bff'
+  color: '#4A90E2'
 })
+
+const colorPresets = [
+  '#4A90E2', // Blue
+  '#50E3C2', // Turquoise
+  '#F5A623', // Orange
+  '#D0021B', // Red
+  '#7ED321', // Green
+  '#9013FE', // Purple
+  '#BD10E0', // Pink
+  '#4A4A4A', // Dark Gray
+]
+
+const getInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+}
+
+const getAssignedTasksCount = (memberId: string) => {
+  return store.tasks.value.filter(task => task.teamMemberId === memberId).length
+}
 
 const editMember = (member: TeamMember) => {
   editingMember.value = member
@@ -107,30 +160,52 @@ const closeModal = () => {
   editingMember.value = null
   memberForm.value = {
     name: '',
-    color: '#007bff'
+    color: '#4A90E2'
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .team-members {
-  padding: 1rem;
+  padding: 1.5rem;
+  background: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   &-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 
     h2 {
       margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .add-member-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      
+      .icon {
+        font-size: 1.25rem;
+        line-height: 1;
+      }
     }
   }
 
   &-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    overflow-y: auto;
+    flex: 1;
   }
 }
 
@@ -138,21 +213,51 @@ const closeModal = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem;
+  padding: 1rem;
   background: white;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+  }
 
   .member-info {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
   }
 
-  .member-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
+  .member-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+    font-size: 0.875rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .member-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .member-name {
+      font-weight: 500;
+      color: #1e293b;
+    }
+
+    .member-tasks {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
   }
 
   .member-actions {
@@ -161,16 +266,98 @@ const closeModal = () => {
   }
 }
 
-.close-btn {
+.action-btn {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  padding: 0.5rem;
   cursor: pointer;
-  padding: 0;
-  color: var(--secondary-color);
+  border-radius: 6px;
+  color: #64748b;
+  transition: all 0.2s ease;
 
   &:hover {
-    color: var(--dark-color);
+    background-color: #f1f5f9;
+    color: #1e293b;
+  }
+
+  &.edit-btn:hover {
+    color: var(--primary-color);
+  }
+
+  &.delete-btn:hover {
+    color: var(--error-color);
+  }
+
+  svg {
+    display: block;
+  }
+}
+
+.color-picker-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  input[type="color"] {
+    width: 100%;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border: none;
+      border-radius: 4px;
+    }
+  }
+
+  .color-presets {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .color-preset {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
+
+.modal {
+  .modal-body {
+    .form-group {
+      input[type="text"] {
+        background-color: #f8fafc;
+        border: 1px solid var(--border-color);
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+
+        &:focus {
+          background-color: white;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+      }
+    }
   }
 }
 </style> 

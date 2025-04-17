@@ -6,6 +6,27 @@
     </div>
 
     <div class="gantt-content">
+      <svg class="dependency-arrows">
+        <defs>
+          <marker
+            id="arrowhead"
+            markerWidth="10"
+            markerHeight="7"
+            refX="9"
+            refY="3.5"
+            orient="auto"
+          >
+            <polygon points="0 0, 10 3.5, 0 7" fill="var(--secondary-color)" />
+          </marker>
+        </defs>
+        <path
+          v-for="task in tasksWithDependencies"
+          :key="task.id + '-dep'"
+          :d="getDependencyPath(task)"
+          class="dependency-path"
+          marker-end="url(#arrowhead)"
+        />
+      </svg>
       <div class="gantt-timeline">
         <div class="timeline-header">
           <div class="task-info-header">Task Info</div>
@@ -67,29 +88,6 @@
           </div>
         </div>
       </div>
-      
-      <!-- Move SVG inside gantt-content and adjust positioning -->
-      <!-- <svg class="dependency-arrows">
-        <defs>
-          <marker
-            id="arrowhead"
-            markerWidth="10"
-            markerHeight="7"
-            refX="9"
-            refY="3.5"
-            orient="auto"
-          >
-            <polygon points="0 0, 10 3.5, 0 7" fill="var(--secondary-color)" />
-          </marker>
-        </defs>
-        <g v-for="task in tasksWithDependencies" :key="task.id">
-          <path
-            :d="getDependencyPath(task)"
-            class="dependency-path"
-            marker-end="url(#arrowhead)"
-          />
-        </g>
-      </svg> -->
     </div>
 
     <!-- Add/Edit Task Modal -->
@@ -433,15 +431,24 @@ const handleScroll = (event: Event) => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px var(--shadow-color);
   
   .gantt-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    padding: 1.5rem;
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 12px 12px 0 0;
     
     h2 {
       margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1e293b;
     }
   }
 }
@@ -450,26 +457,25 @@ const handleScroll = (event: Event) => {
   flex: 1;
   overflow: hidden;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 0 0 12px 12px;
+  background: white;
   position: relative;
 }
 
 .dependency-arrows {
   position: absolute;
   top: 0;
-  left: 200px;
-  width: calc(100% - 200px);
+  left: 0;
+  width: 100%;
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  overflow: visible;
+}
 
-  .dependency-path {
-    fill: none;
-    stroke: var(--secondary-color);
-    stroke-width: 2;
-    opacity: 0.9;
-  }
+.dependency-path {
+  fill: none;
+  stroke: var(--secondary-color);
+  stroke-width: 2px;
 }
 
 .gantt-timeline {
@@ -480,22 +486,24 @@ const handleScroll = (event: Event) => {
   .timeline-header {
     display: flex;
     border-bottom: 1px solid var(--border-color);
-    background: var(--light-color);
+    background: var(--header-bg);
     position: sticky;
     top: 0;
     z-index: 2;
     
     .task-info-header {
       width: 200px;
-      padding: 0.75rem;
-      font-weight: 500;
+      padding: 1rem;
+      font-weight: 600;
       border-right: 1px solid var(--border-color);
-      background: var(--light-color);
+      background: var(--header-bg);
+      color: #1e293b;
     }
     
     .timeline-dates-wrapper {
       overflow: hidden;
       flex: 1;
+      background: var(--header-bg);
       
       .timeline-dates {
         display: flex;
@@ -504,10 +512,12 @@ const handleScroll = (event: Event) => {
         
         .timeline-date {
           width: 100px;
-          padding: 0.75rem;
+          padding: 1rem;
           text-align: center;
           border-right: 1px solid var(--border-color);
           flex-shrink: 0;
+          font-weight: 500;
+          color: #64748b;
         }
       }
     }
@@ -518,6 +528,7 @@ const handleScroll = (event: Event) => {
     display: flex;
     overflow: hidden;
     position: relative;
+    background: white;
 
     .task-info-column {
       width: 200px;
@@ -527,21 +538,28 @@ const handleScroll = (event: Event) => {
       background: white;
 
       .task-info {
-        height: 60px; // Fixed height for task info
-        padding: 0.75rem;
+        height: 60px;
+        padding: 0.75rem 1rem;
         border-bottom: 1px solid var(--border-color);
         display: flex;
         flex-direction: column;
         justify-content: center;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background-color: var(--task-hover);
+        }
         
         .task-name {
           display: block;
           font-weight: 500;
+          color: #1e293b;
+          margin-bottom: 0.25rem;
         }
         
         .task-duration {
           font-size: 0.875rem;
-          color: var(--secondary-color);
+          color: #64748b;
         }
       }
     }
@@ -555,17 +573,16 @@ const handleScroll = (event: Event) => {
         position: absolute;
         top: 0;
         left: 0;
-        width: fit-content;
+        width: 100%;
         height: 100%;
         pointer-events: none;
-        min-width: 100%;
         
         .date-grid-line {
           position: absolute;
           top: 0;
           width: 1px;
           height: 100%;
-          background-color: var(--border-color);
+          background-color: #e2e8f0;
           opacity: 0.5;
         }
       }
@@ -576,12 +593,13 @@ const handleScroll = (event: Event) => {
         min-width: fit-content;
         
         .task-row {
-          height: 60px; // Match task info height exactly
+          height: 60px;
           border-bottom: 1px solid var(--border-color);
           cursor: pointer;
+          transition: background-color 0.2s ease;
           
           &:hover {
-            background: var(--light-color);
+            background-color: var(--task-hover);
           }
           
           .timeline-grid {
@@ -592,12 +610,14 @@ const handleScroll = (event: Event) => {
               position: absolute;
               top: 50%;
               transform: translateY(-50%);
-              height: 30px;
-              border-radius: 4px;
-              transition: box-shadow 0.3s ease;
+              height: 32px;
+              border-radius: 6px;
+              transition: all 0.2s ease;
+              box-shadow: 0 2px 4px var(--shadow-color);
 
               &:hover {
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                transform: translateY(-50%) scale(1.02);
+                box-shadow: 0 4px 8px var(--shadow-color);
               }
             }
           }
@@ -607,48 +627,119 @@ const handleScroll = (event: Event) => {
   }
 }
 
-.timeline-dates {
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   display: flex;
-  overflow-x: auto;
-  min-width: fit-content;
-  
-  .timeline-date {
-    width: 100px;
-    padding: 0.75rem;
-    text-align: center;
-    border-right: 1px solid var(--border-color);
-    flex-shrink: 0;
-  }
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .modal {
-  .modal-actions {
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px var(--shadow-color);
+
+  .modal-header {
     display: flex;
-    gap: 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--header-bg);
+    border-radius: 12px 12px 0 0;
+
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #64748b;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: var(--task-hover);
+        color: color.adjust(#1e293b, $lightness: -10%);
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+
+    .form-group {
+      margin-bottom: 1.25rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #1e293b;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+
+        &:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+      }
+
+      .hours-to-days {
+        margin-left: 0.5rem;
+        color: #64748b;
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background-color: var(--light-color);
+    border-top: 1px solid var(--border-color);
+    border-radius: 0 0 12px 12px;
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
   }
 }
 
-.hours-to-days {
-  margin-left: 0.5rem;
-  color: var(--secondary-color);
-  font-size: 0.875rem;
+.btn-primary:hover {
+  background-color: color.adjust(var(--primary-color), $lightness: -10%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px var(--shadow-color);
 }
 
-.form-group {
-  margin-bottom: 1rem;
-  
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  
-  input[type="number"] {
-    width: 100px;
-    display: inline-block;
-  }
-}
-
-:root {
-  --error-color: #ff4444;
+.btn-danger:hover {
+  background-color: color.adjust(var(--error-color), $lightness: -10%);
 }
 </style> 
