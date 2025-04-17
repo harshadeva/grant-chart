@@ -448,7 +448,7 @@ const handleScroll = (event: Event) => {
       margin: 0;
       font-size: 1.5rem;
       font-weight: 600;
-      color: #1e293b;
+      color: var(--text-dark);
     }
   }
 }
@@ -677,7 +677,7 @@ const handleScroll = (event: Event) => {
 
       &:hover {
         background-color: var(--task-hover);
-        color: color.adjust(#1e293b, $lightness: -10%);
+        color: var(--text-dark-hover);
       }
     }
   }
@@ -733,13 +733,32 @@ const handleScroll = (event: Event) => {
   }
 }
 
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
 .btn-primary:hover {
-  background-color: color.adjust(var(--primary-color), $lightness: -10%);
+  background-color: var(--primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 6px var(--shadow-color);
 }
 
+.btn-danger {
+  background-color: var(--error-color);
+  color: white;
+}
+
 .btn-danger:hover {
-  background-color: color.adjust(var(--error-color), $lightness: -10%);
+  background-color: var(--error-hover);
+}
+
+.modal-header {
+  .close-btn {
+    &:hover {
+      background-color: var(--task-hover);
+      color: var(--text-dark-hover);
+    }
+  }
 }
 </style> 

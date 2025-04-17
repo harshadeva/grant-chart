@@ -42,14 +42,19 @@ const exportData = () => {
 
 <style lang="scss">
 :root {
-  --primary-color: #4a90e2;
+  --primary-color: #4A90E2;
+  --primary-hover: #357abd;
   --secondary-color: #6c757d;
+  --secondary-hover: #545b62;
   --border-color: #e9ecef;
   --light-color: #f8f9fa;
   --error-color: #ff4444;
+  --error-hover: #ff1a1a;
   --header-bg: #ffffff;
   --task-hover: #f1f5f9;
   --shadow-color: rgba(0, 0, 0, 0.1);
+  --text-dark: #1e293b;
+  --text-dark-hover: #0f172a;
 }
 
 body {
@@ -130,7 +135,7 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #357abd;
+  background-color: var(--primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 6px var(--shadow-color);
 }
@@ -141,6 +146,6 @@ body {
 }
 
 .btn-danger:hover {
-  background-color: #ff1a1a;
+  background-color: var(--error-hover);
 }
 </style> 
