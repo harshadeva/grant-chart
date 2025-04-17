@@ -1,0 +1,31 @@
+{
+  "name": "vue3-gantt-chart",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "vue-select": "^4.0.0-beta.6",
+    "date-fns": "^2.30.0",
+    "uuid": "^9.0.0",
+    "@vueuse/core": "^10.2.1",
+    "sass": "^1.63.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.3",
+    "@types/uuid": "^9.0.2",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "@vue/tsconfig": "^0.4.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.3.9",
+    "vue-tsc": "^1.8.3",
+    "eslint": "^8.44.0",
+    "eslint-plugin-vue": "^9.15.1"
+  }
+} 
