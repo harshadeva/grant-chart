@@ -446,9 +446,51 @@ const handleScroll = (event: Event) => {
     
     h2 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 3px;
+        height: 20px;
+        background: var(--primary-color);
+        border-radius: 2px;
+      }
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+
+      &::before {
+        content: '+';
+        font-size: 1.25rem;
+        line-height: 1;
+        margin-right: 0.25rem;
+      }
+
+      &:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
     }
   }
 }

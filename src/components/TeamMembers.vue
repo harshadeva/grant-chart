@@ -178,12 +178,26 @@ const closeModal = () => {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
 
     h2 {
       margin: 0;
       font-size: 1.25rem;
       font-weight: 600;
-      color: #1e293b;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 3px;
+        height: 20px;
+        background: var(--primary-color);
+        border-radius: 2px;
+      }
     }
 
     .add-member-btn {
@@ -192,10 +206,25 @@ const closeModal = () => {
       gap: 0.5rem;
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      transition: all 0.2s ease;
       
       .icon {
         font-size: 1.25rem;
         line-height: 1;
+      }
+
+      &:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
   }
