@@ -91,7 +91,8 @@
     </div>
 
     <!-- Add/Edit Task Modal -->
-    <div v-if="showAddModal || editingTask" class="modal-overlay" @click="closeModal">
+    <div v-if="showAddModal || editingTask" class="modal-overlay">
+      <div class="modal-backdrop" @click="closeModal"></div>
       <div class="modal" @click.stop>
         <div class="modal-header">
           <h2>{{ editingTask ? 'Edit' : 'Add' }} Task</h2>
@@ -675,21 +676,31 @@ const handleScroll = (event: Event) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
 .modal {
+  position: relative;
   background: white;
   border-radius: 12px;
   padding: 0;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 20px 25px -5px var(--shadow-color);
+  z-index: 1;
 
   .modal-header {
     display: flex;

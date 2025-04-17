@@ -40,7 +40,8 @@
     </div>
 
     <!-- Add/Edit Modal -->
-    <div v-if="showAddModal || editingMember" class="modal-overlay" @click="closeModal">
+    <div v-if="showAddModal || editingMember" class="modal-overlay">
+      <div class="modal-backdrop" @click="closeModal"></div>
       <div class="modal" @click.stop>
         <div class="modal-header">
           <h2>{{ editingMember ? 'Edit' : 'Add' }} Team Member</h2>
@@ -369,9 +370,72 @@ const closeModal = () => {
   }
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
 .modal {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px var(--shadow-color);
+  z-index: 1;
+
+  .modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--text-dark);
+    }
+  }
+
   .modal-body {
+    padding: 1rem;
+
     .form-group {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-dark);
+      }
+
       input[type="text"] {
         background-color: #f8fafc;
         border: 1px solid var(--border-color);
@@ -386,6 +450,32 @@ const closeModal = () => {
           box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
         }
       }
+    }
+  }
+
+  .modal-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+
+    .btn {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: var(--primary-hover);
+        color: white;
+      }
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
     }
   }
 }
